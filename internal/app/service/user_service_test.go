@@ -234,6 +234,24 @@ func TestUpdate(t *testing.T) {
 		// Assert
 		assert.Equal(t, service.ErrUserNotFound, err)
 	})
+
+	t.Run("should return ErrUserAlreadyExists", func(t *testing.T) {
+		t.Parallel()
+
+		// Arrange
+		userRepositoryMock := &userRepositoryMock{
+			UpdateFunc: func(user *repository.User) error {
+				return repository.ErrUserAlreadyExists
+			},
+		}
+		userService := service.NewUserService(userRepositoryMock)
+
+		// Act
+		err := userService.Update(&USER1_SERVICE)
+
+		// Assert
+		assert.Equal(t, service.ErrUserAlreadyExists, err)
+	})
 }
 
 func TestDelete(t *testing.T) {

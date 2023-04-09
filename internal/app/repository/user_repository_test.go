@@ -197,6 +197,29 @@ func TestUpdate(t *testing.T) {
 		// Assert
 		assert.Equal(t, repository.ErrUserNotFound, err)
 	})
+
+	t.Run("cannot use email of another user", func(t *testing.T) {
+		t.Parallel()
+		// Arrange
+		db := test.StartDatabase(t)
+		defer db.Close()
+		pgRepository := repository.NewPostgresUserRepository(db, time.Second*2)
+
+		_, err := pgRepository.Create(&USER1)
+		require.NoError(t, err)
+		_, err = pgRepository.Create(&USER2)
+		require.NoError(t, err)
+
+		modifiedUser := USER2
+		modifiedUser.Email = USER1.Email
+
+		// Act
+		err = pgRepository.Update(&modifiedUser)
+		require.Error(t, err)
+
+		// Assert
+		assert.Equal(t, repository.ErrUserAlreadyExists, err)
+	})
 }
 
 func TestDelete(t *testing.T) {

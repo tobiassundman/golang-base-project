@@ -89,8 +89,11 @@ func (r *PostgresUserRepository) Update(user *User) error {
 	ctx, cancel := context.WithTimeout(context.Background(), r.queryTimeout)
 	defer cancel()
 	result, err := r.db.ExecContext(ctx, postgresUpdateUserQuery, user.Name, user.Email, user.Age, user.ID)
-	if err != nil {
-		return err
+	switch typedErr := err.(type) {
+	case pgx.PgError:
+		if typedErr.Code == pgerrcode.UniqueViolation {
+			return ErrUserAlreadyExists
+		}
 	}
 	if noRowsAffected(result) {
 		return ErrUserNotFound

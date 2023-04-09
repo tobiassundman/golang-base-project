@@ -77,8 +77,11 @@ func (s *userService) Create(user *User) (*User, error) {
 // Update updates a user.
 func (s *userService) Update(user *User) error {
 	err := s.userRepository.Update(serviceUserToRepositoryUser(user))
-	if errors.Is(err, repository.ErrUserNotFound) {
+	switch {
+	case errors.Is(err, repository.ErrUserNotFound):
 		return ErrUserNotFound
+	case errors.Is(err, repository.ErrUserAlreadyExists):
+		return ErrUserAlreadyExists
 	}
 	return err
 }

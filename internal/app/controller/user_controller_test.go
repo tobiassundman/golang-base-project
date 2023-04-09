@@ -381,7 +381,7 @@ func TestCreate(t *testing.T) {
 		r.POST("/v1/users").
 			SetJSON(gofight.D{
 				"name":  "Name Name 1",
-				"email": "email1@email.com",	
+				"email": "email1@email.com",
 				"age":   37,
 			}).
 			Run(router, func(r gofight.HTTPResponse, rq gofight.HTTPRequest) {
@@ -633,6 +633,43 @@ func TestUpdate(t *testing.T) {
 			}).
 			Run(router, func(r gofight.HTTPResponse, rq gofight.HTTPRequest) {
 				require.Equal(t, http.StatusOK, r.Code)
+			})
+	})
+
+	t.Run("conflict with other user", func(t *testing.T) {
+		t.Parallel()
+		// Arrange
+		serviceMock := &userServiceMock{
+			UpdateFunc: func(user *service.User) error {
+				return service.ErrUserAlreadyExists
+			},
+		}
+
+		controller := controller.NewUserController(serviceMock, zap.NewNop())
+
+		router := gin.Default()
+		controller.ConfigureRoutes(router)
+		r := gofight.New()
+
+		// Act
+		r.PUT("/v1/users").
+			SetJSON(gofight.D{
+				"id":    1,
+				"name":  "Name Name 1",
+				"email": "email1@email.com",
+				"age":   37,
+			}).
+			Run(router, func(r gofight.HTTPResponse, rq gofight.HTTPRequest) {
+				require.Equal(t, http.StatusConflict, r.Code)
+				require.JSONEq(
+					t,
+					`{
+						"error_code": "ErrUserAlreadyExists", 
+						"error_message": "user already exists", 
+						"status": 409
+					}`,
+					r.Body.String(),
+				)
 			})
 	})
 }
