@@ -1,0 +1,27 @@
+version: '3'
+services:
+  postgres:
+    image: postgres:15
+    restart: always
+    environment:
+      POSTGRES_PASSWORD: demo_password
+      POSTGRES_USER: demo_user
+      POSTGRES_DB: demo_db
+    ports:
+      - 5432:5432
+    networks:
+      - demo-net
+  demo-app:
+    image: go-demo-app:latest
+    restart: always
+    ports:
+      - 8081:8080
+    depends_on:
+      - postgres
+    networks:
+      - demo-net
+    environment:
+      DB_HOST: postgres
+
+networks:
+  demo-net:

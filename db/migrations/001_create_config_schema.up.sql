@@ -1,0 +1,10 @@
+CREATE SCHEMA IF NOT EXISTS config AUTHORIZATION demo_user;
+
+CREATE TABLE IF NOT EXISTS config.users (
+    id SERIAL PRIMARY KEY,
+    name VARCHAR(255) NOT NULL,
+    age INTEGER NOT NULL,
+    email VARCHAR(255) NOT NULL,
+    created_at TIMESTAMP NOT NULL DEFAULT NOW(),
+    CONSTRAINT config_email_unique UNIQUE (email)
+);
