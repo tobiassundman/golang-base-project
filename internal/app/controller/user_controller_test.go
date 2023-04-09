@@ -46,6 +46,7 @@ func (m *userServiceMock) Delete(id int) error {
 
 func TestGetAll(t *testing.T) {
 	t.Run("returns all users", func(t *testing.T) {
+		t.Parallel()
 		// Arrange
 		serviceMock := &userServiceMock{
 			GetAllFunc: func() ([]*service.User, error) {
@@ -100,6 +101,7 @@ func TestGetAll(t *testing.T) {
 	})
 
 	t.Run("returns empty list when no users", func(t *testing.T) {
+		t.Parallel()
 		// Arrange
 		serviceMock := &userServiceMock{
 			GetAllFunc: func() ([]*service.User, error) {
@@ -128,6 +130,7 @@ func TestGetAll(t *testing.T) {
 	})
 
 	t.Run("returns 500 when error", func(t *testing.T) {
+		t.Parallel()
 		// Arrange
 		serviceMock := &userServiceMock{
 			GetAllFunc: func() ([]*service.User, error) {
@@ -159,6 +162,7 @@ func TestGetAll(t *testing.T) {
 
 func TestGet(t *testing.T) {
 	t.Run("returns user", func(t *testing.T) {
+		t.Parallel()
 		// Arrange
 		serviceMock := &userServiceMock{
 			GetFunc: func(id int) (*service.User, error) {
@@ -195,6 +199,7 @@ func TestGet(t *testing.T) {
 	})
 
 	t.Run("returns 404 when user not found", func(t *testing.T) {
+		t.Parallel()
 		// Arrange
 		serviceMock := &userServiceMock{
 			GetFunc: func(id int) (*service.User, error) {
@@ -225,6 +230,7 @@ func TestGet(t *testing.T) {
 	})
 
 	t.Run("returns 500 when error", func(t *testing.T) {
+		t.Parallel()
 		// Arrange
 		serviceMock := &userServiceMock{
 			GetFunc: func(id int) (*service.User, error) {
@@ -254,6 +260,7 @@ func TestGet(t *testing.T) {
 	})
 
 	t.Run("returns 400 when invalid id", func(t *testing.T) {
+		t.Parallel()
 		// Arrange
 		serviceMock := &userServiceMock{}
 		controller := controller.NewUserController(serviceMock, zap.NewNop())
@@ -281,6 +288,7 @@ func TestGet(t *testing.T) {
 
 func TestCreate(t *testing.T) {
 	t.Run("creates user", func(t *testing.T) {
+		t.Parallel()
 		// Arrange
 		serviceMock := &userServiceMock{
 			CreateFunc: func(user *service.User) (*service.User, error) {
@@ -321,6 +329,7 @@ func TestCreate(t *testing.T) {
 	})
 
 	t.Run("returns conflict when user already exists", func(t *testing.T) {
+		t.Parallel()
 		// Arrange
 		serviceMock := &userServiceMock{
 			CreateFunc: func(user *service.User) (*service.User, error) {
@@ -355,6 +364,7 @@ func TestCreate(t *testing.T) {
 	})
 
 	t.Run("returns 500 when error", func(t *testing.T) {
+		t.Parallel()
 		// Arrange
 		serviceMock := &userServiceMock{
 			CreateFunc: func(user *service.User) (*service.User, error) {
@@ -389,6 +399,7 @@ func TestCreate(t *testing.T) {
 	})
 
 	t.Run("returns 400 when invalid email", func(t *testing.T) {
+		t.Parallel()
 		// Arrange
 		serviceMock := &userServiceMock{}
 		controller := controller.NewUserController(serviceMock, zap.NewNop())
@@ -419,6 +430,7 @@ func TestCreate(t *testing.T) {
 	})
 
 	t.Run("additional fields are ignored", func(t *testing.T) {
+		t.Parallel()
 		// Arrange
 		serviceMock := &userServiceMock{
 			CreateFunc: func(user *service.User) (*service.User, error) {
@@ -464,6 +476,7 @@ func TestCreate(t *testing.T) {
 
 func TestUpdate(t *testing.T) {
 	t.Run("updates user", func(t *testing.T) {
+		t.Parallel()
 		// Arrange
 		serviceMock := &userServiceMock{
 			UpdateFunc: func(user *service.User) error {
@@ -491,6 +504,7 @@ func TestUpdate(t *testing.T) {
 	})
 
 	t.Run("returns 404 when user not found", func(t *testing.T) {
+		t.Parallel()
 		// Arrange
 		serviceMock := &userServiceMock{
 			UpdateFunc: func(user *service.User) error {
@@ -526,6 +540,7 @@ func TestUpdate(t *testing.T) {
 	})
 
 	t.Run("returns 500 when error", func(t *testing.T) {
+		t.Parallel()
 		// Arrange
 		serviceMock := &userServiceMock{
 			UpdateFunc: func(user *service.User) error {
@@ -561,6 +576,7 @@ func TestUpdate(t *testing.T) {
 	})
 
 	t.Run("returns 400 when invalid email", func(t *testing.T) {
+		t.Parallel()
 		// Arrange
 		serviceMock := &userServiceMock{}
 		controller := controller.NewUserController(serviceMock, zap.NewNop())
@@ -592,6 +608,7 @@ func TestUpdate(t *testing.T) {
 	})
 
 	t.Run("additional fields are ignored", func(t *testing.T) {
+		t.Parallel()
 		// Arrange
 		serviceMock := &userServiceMock{
 			UpdateFunc: func(user *service.User) error {
@@ -622,6 +639,7 @@ func TestUpdate(t *testing.T) {
 
 func TestDelete(t *testing.T) {
 	t.Run("deletes user", func(t *testing.T) {
+		t.Parallel()
 		// Arrange
 		serviceMock := &userServiceMock{
 			DeleteFunc: func(id int) error {
@@ -643,6 +661,7 @@ func TestDelete(t *testing.T) {
 	})
 
 	t.Run("returns 404 when user not found", func(t *testing.T) {
+		t.Parallel()
 		// Arrange
 		serviceMock := &userServiceMock{
 			DeleteFunc: func(id int) error {
@@ -672,6 +691,7 @@ func TestDelete(t *testing.T) {
 	})
 
 	t.Run("returns 500 when error", func(t *testing.T) {
+		t.Parallel()
 		// Arrange
 		serviceMock := &userServiceMock{
 			DeleteFunc: func(id int) error {
